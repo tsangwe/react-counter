@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { COUNTER_INIT_VALUE, COUNTER_INIT_MINUS_VALUE } from '../constants/constants'
 
 export class Counter extends Component {
     constructor(props) {
@@ -8,23 +9,34 @@ export class Counter extends Component {
         this.onDecrease = this.onDecrease.bind(this);
 
         this.state = {
-            number: 0,
+            value: 0,
         };
     }
 
     onIncrease() {
-        this.setState((prevState) => ({number: prevState.number + 1}));
+        this.setState((prevState) => ({ value: prevState.value + COUNTER_INIT_VALUE }));
     }
 
     onDecrease() {
-        this.setState((prevState) => ({number: prevState.number - 1}));
+        this.setState((prevState) => ({ value: prevState.value - COUNTER_INIT_VALUE }));
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.number !== this.props.number) {
+            this.setState({ value: COUNTER_INIT_VALUE });
+        }
+        if (this.state.value > prevState.value) {
+            this.props.onCalculate(COUNTER_INIT_VALUE);
+        } else if (this.state.value < prevState.value) {
+            this.props.onCalculate(COUNTER_INIT_MINUS_VALUE);
+        }
     }
 
     render() {
         return (
             <div>
                 <button onClick={this.onIncrease}>+</button>
-                <span>{this.state.number}</span>
+                <span>{this.state.value}</span>
                 <button onClick={this.onDecrease}>-</button>
             </div>
         )

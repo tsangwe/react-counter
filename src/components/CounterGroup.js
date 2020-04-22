@@ -8,9 +8,11 @@ export default class CounterGroup extends Component {
 
         this.initArray = this.initArray.bind(this);
         this.numChange = this.numChange.bind(this);
+        this.onCalculate = this.onCalculate.bind(this);
 
         this.state = {
             size: INIT_COUNTER_NUM,
+            sum: 0,
         }
     }
 
@@ -26,6 +28,10 @@ export default class CounterGroup extends Component {
         })
     }
 
+    onCalculate(changeAmount) {
+        this.setState((prevState) => ({sum: prevState.sum + changeAmount}));
+    }
+
     render() {
         let counters = this.initArray(this.state.size);
         return (
@@ -34,7 +40,8 @@ export default class CounterGroup extends Component {
                     <label>Number of Counter:  </label>
                     <input type="text" onChange={this.numChange} value={this.state.size} />
                 </form>
-                {counters.map((value) => (<Counter key={value} />))} 
+                <span>So of all counters value: {this.state.sum}</span>
+                {counters.map((value) => (<Counter key={value} onCalculate={this.onCalculate} />))}
             </div>
         )
     }

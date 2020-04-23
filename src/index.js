@@ -3,9 +3,17 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import "antd/dist/antd.css";
+import { PageHeader } from 'antd';
 
 ReactDOM.render(
   <React.StrictMode>
+    <PageHeader
+    className="site-page-header"
+    onBack={() => null}
+    title="Intelligent Counter"
+    subTitle=""
+  />
     <App />
   </React.StrictMode>,
   document.getElementById('root')

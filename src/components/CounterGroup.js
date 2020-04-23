@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import Counter from './Counter'
+import CounterApi from '../apis/CounterApi'
 import { INIT_COUNTER_NUM } from '../constants/constants'
+import { Card, Input, Empty } from 'antd';
 
 export default class CounterGroup extends Component {
     constructor(props) {
@@ -23,24 +25,37 @@ export default class CounterGroup extends Component {
 
     numChange(event) {
         const value = event.target.value;
-        this.setState({
-            size: value.length > 0 ? parseInt(value) : 0,
-        })
+        CounterApi.putCounterSize({ size: value.length > 0 ? parseInt(value) : 0 }).then((response) => {
+            const newSize = response.data.size;
+            this.setState({ size: newSize });
+        });
     }
 
     onCalculate(changeAmount) {
-        this.setState((prevState) => ({sum: prevState.sum + changeAmount}));
+        this.setState((prevState) => ({ sum: prevState.sum + changeAmount }));
+    }
+
+    componentDidMount() {
+        CounterApi.getCounterSize().then((response) => {
+            const newSize = response.data.size;
+            this.setState({ size: newSize });
+        });
     }
 
     render() {
         let counters = this.initArray(this.state.size);
         return (
             <div>
+                <Card style={{ width: 300 }}>
                 <form>
                     <label>Number of Counter:  </label>
-                    <input type="text" onChange={this.numChange} value={this.state.size} />
+                    <Input type="text" onChange={this.numChange} value={this.state.size} />
                 </form>
+                <br />
                 <span>So of all counters value: {this.state.sum}</span>
+                </Card>
+                <br />
+                { this.state.size  == 0 ? <Empty description={ <span>No counter</span> } /> : null }
                 {counters.map((value) => (<Counter key={value} onCalculate={this.onCalculate} />))}
             </div>
         )

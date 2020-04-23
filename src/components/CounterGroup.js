@@ -25,10 +25,9 @@ export default class CounterGroup extends Component {
 
     numChange(event) {
         const value = event.target.value;
-        CounterApi.putCounterSize({ size: value.length > 0 ? parseInt(value) : 0 }).then((response) => {
-            const newSize = response.data.size;
-            this.setState({ size: newSize });
-        });
+        this.setState({
+            size: value.length > 0 ? parseInt(value) : 0,
+        })
     }
 
     onCalculate(changeAmount) {
